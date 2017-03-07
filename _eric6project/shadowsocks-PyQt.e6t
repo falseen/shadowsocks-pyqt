@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE Tasks SYSTEM "Tasks-6.0.dtd">
+<!-- eric6 tasks file for project shadowsocks-pyqt -->
+<!-- Saved: 2017-03-08, 00:58:14 -->
+<Tasks version="6.0">
+  <ProjectScanFilter></ProjectScanFilter>
+  <Task priority="1" completed="False" type="1" uid="{fdd7c82b-a394-49cf-9986-bc1291505b0b}">
+    <Summary>TODO: not implemented yet</Summary>
+    <Description></Description>
+    <Created>2017-03-08, 00:58:11</Created>
+    <Resource>
+      <Filename>main.py</Filename>
+      <Linenumber>32</Linenumber>
+    </Resource>
+  </Task>
+</Tasks>
