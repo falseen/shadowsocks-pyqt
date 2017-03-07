@@ -41,3 +41,5 @@ venv/
 # Pycharm
 .idea
 
+#eric6
+_eric6project
