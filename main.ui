@@ -174,6 +174,46 @@
             <verstretch>0</verstretch>
            </sizepolicy>
           </property>
+          <item>
+           <property name="text">
+            <string>aes-256-cfb</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>aes-128-cfb</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>aes-192-cfb</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>salsa20</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>chacha20</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>rc4</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>rc4-md5</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>table</string>
+           </property>
+          </item>
          </widget>
         </item>
         <item row="7" column="1">
@@ -220,7 +260,7 @@
      </item>
     </layout>
    </widget>
-   <widget class="QTableView" name="connectionView_2">
+   <widget class="QListWidget" name="configlist">
     <property name="geometry">
      <rect>
       <x>10</x>
@@ -320,6 +360,14 @@
      <string>取消</string>
     </property>
    </widget>
+   <zorder>gridLayoutWidget</zorder>
+   <zorder>add_config</zorder>
+   <zorder>del_config</zorder>
+   <zorder>up</zorder>
+   <zorder>down</zorder>
+   <zorder>b_yes</zorder>
+   <zorder>b_exit</zorder>
+   <zorder>configlist</zorder>
   </widget>
  </widget>
  <resources/>
