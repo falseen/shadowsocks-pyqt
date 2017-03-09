@@ -5,7 +5,8 @@ Module implementing MainWindow.
 """
 from PyQt5 import QtWidgets
 from PyQt5.QtCore import pyqtSlot
-from PyQt5.QtWidgets import QMainWindow
+from PyQt5.QtWidgets import QMainWindow, QSystemTrayIcon
+from PyQt5.QtGui import QIcon
 
 from Ui_main import Ui_MainWindow
 from shadowsocks import local
@@ -86,8 +87,16 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     @pyqtSlot()
     def on_b_exit_clicked(self):
+        self.hide()
+
+    def app_quit(self):
         self.sslocal_process.terminate()
         self.sslocal_process.join()
+        sys.exit(app.exec_())
+
+    def closeEvent(self, event):
+        self.hide()
+        event.ignore()
 
     @pyqtSlot()
     def on_del_config_clicked(self):
@@ -132,6 +141,13 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.otaCheckBox.setChecked(one_time_auth)
         self.remarksEdit.setText(remarks)
 
+    def TuoPanEvent(self, reason):
+        if reason == QSystemTrayIcon.DoubleClick:  
+            if self.isHidden():
+                self.show()
+                self.activateWindow()
+            else:  
+                self.hide()
 
 
 if __name__ == "__main__":
@@ -154,8 +170,17 @@ if __name__ == "__main__":
         configlist.addItem(item_text)
     index = mySW.gui_config.get("index", 0)
     configlist.setCurrentRow(index)
+    mySW.tray = QSystemTrayIcon()
+    mySW.icon = QIcon('Shadowsocks_logo.png')
+    mySW.tray.setIcon(mySW.icon)
+    mySW.tray.activated[QSystemTrayIcon.ActivationReason].connect(mySW.TuoPanEvent)
+    mySW.tray_menu = QtWidgets.QMenu(QtWidgets.QApplication.desktop())
+    mySW.QuitAction = QtWidgets.QAction(u'退出 ', mySW, triggered=mySW.app_quit)
+    mySW.tray_menu.addAction(mySW.QuitAction)
+    mySW.tray.setContextMenu(mySW.tray_menu) #设置系统托盘菜单
+    mySW.tray.show()
     mySW.update()
-    mySW.show()
+    # mySW.show()
     sys.exit(app.exec_())
     
 

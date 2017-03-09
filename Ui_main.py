@@ -12,6 +12,9 @@ class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(561, 412)
+        icon = QtGui.QIcon()
+        icon.addPixmap(QtGui.QPixmap("Shadowsocks_logo.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        MainWindow.setWindowIcon(icon)
         self.centralWidget = QtWidgets.QWidget(MainWindow)
         self.centralWidget.setObjectName("centralWidget")
         self.gridLayoutWidget = QtWidgets.QWidget(self.centralWidget)
@@ -169,10 +172,9 @@ class Ui_MainWindow(object):
         MainWindow.setCentralWidget(self.centralWidget)
 
         self.retranslateUi(MainWindow)
-        self.b_exit.clicked.connect(MainWindow.close)
+        self.b_exit.clicked.connect(MainWindow.hide)
         self.configlist.currentRowChanged['int'].connect(MainWindow.update)
         self.add_config.clicked.connect(self.configlist.scrollToBottom)
-        self.add_config.clicked.connect(self.configlist.clearSelection)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):

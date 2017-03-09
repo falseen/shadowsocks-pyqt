@@ -13,6 +13,10 @@
   <property name="windowTitle">
    <string>shadowsocks-pyqt</string>
   </property>
+  <property name="windowIcon">
+   <iconset>
+    <normaloff>Shadowsocks_logo.png</normaloff>Shadowsocks_logo.png</iconset>
+  </property>
   <widget class="QWidget" name="centralWidget">
    <widget class="QWidget" name="gridLayoutWidget">
     <property name="geometry">
@@ -455,7 +459,7 @@
    <sender>b_exit</sender>
    <signal>clicked()</signal>
    <receiver>MainWindow</receiver>
-   <slot>close()</slot>
+   <slot>hide()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>498</x>
@@ -496,22 +500,6 @@
     <hint type="destinationlabel">
      <x>80</x>
      <y>177</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>add_config</sender>
-   <signal>clicked()</signal>
-   <receiver>configlist</receiver>
-   <slot>clearSelection()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>60</x>
-     <y>339</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>57</x>
-     <y>230</y>
     </hint>
    </hints>
   </connection>
