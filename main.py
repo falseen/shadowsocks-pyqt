@@ -15,13 +15,13 @@ import os
 import json
 import logging
 import time
-
+import collections
 
 def read_json(title):
     save_path = os.path.join(sys.path[0], title)
     if title in [x for x in os.listdir('.')]:
         with open(save_path, "r") as f:
-            j = json.load(f)
+            j = json.load(f, object_pairs_hook=collections.OrderedDict)
     else:
         j = {}
     return j    
@@ -47,7 +47,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.setupUi(self)
 
     def save_config(self):
-        new_config = {}
+        new_config = collections.OrderedDict()
         gui_config = self.gui_config
         new_config["server"] = self.serverAddrEdit.text()
         new_config["server_port"] = self.serverPortSpinBox.value()
@@ -99,7 +99,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     @pyqtSlot()
     def on_add_config_clicked(self):
-        new_config = {}
+        new_config = collections.OrderedDict()
         count = self.configlist.count()
         self.configlist.addItem("127.0.0.1")
         new_config["server"] = "127.0.0.1"
