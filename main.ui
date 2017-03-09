@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>514</width>
+    <width>561</width>
     <height>412</height>
    </rect>
   </property>
@@ -19,7 +19,7 @@
      <rect>
       <x>260</x>
       <y>10</y>
-      <width>251</width>
+      <width>294</width>
       <height>301</height>
      </rect>
     </property>
@@ -55,58 +55,34 @@
          <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
         </property>
         <item row="0" column="0">
-         <widget class="QLabel" name="nameLabel">
-          <property name="text">
-           <string>配置名称</string>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="1">
-         <widget class="QLineEdit" name="nameEdit">
-          <property name="text">
-           <string>default</string>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="0">
          <widget class="QLabel" name="serverAddrLabel">
           <property name="text">
            <string>服务器地址</string>
           </property>
          </widget>
         </item>
-        <item row="1" column="1">
+        <item row="0" column="1">
          <widget class="QLineEdit" name="serverAddrEdit">
           <property name="text">
            <string>127.0.0.1</string>
           </property>
          </widget>
         </item>
-        <item row="2" column="0">
+        <item row="1" column="0">
          <widget class="QLabel" name="serverPortLabel">
           <property name="text">
            <string>服务器端口</string>
           </property>
          </widget>
         </item>
-        <item row="2" column="1">
-         <widget class="QLineEdit" name="serverPortEdit">
-          <property name="inputMethodHints">
-           <set>Qt::ImhDigitsOnly|Qt::ImhPreferNumbers</set>
-          </property>
-          <property name="text">
-           <string>8388</string>
-          </property>
-         </widget>
-        </item>
-        <item row="3" column="0">
+        <item row="2" column="0">
          <widget class="QLabel" name="pwdLabel">
           <property name="text">
            <string>密码</string>
           </property>
          </widget>
         </item>
-        <item row="3" column="1">
+        <item row="2" column="1">
          <widget class="QLineEdit" name="pwdEdit">
           <property name="font">
            <font>
@@ -128,45 +104,14 @@
           </property>
          </widget>
         </item>
-        <item row="4" column="0">
-         <widget class="QLabel" name="localAddrLabel">
-          <property name="text">
-           <string>本地地址</string>
-          </property>
-         </widget>
-        </item>
-        <item row="4" column="1">
-         <widget class="QLineEdit" name="localAddrEdit">
-          <property name="text">
-           <string>127.0.0.1</string>
-          </property>
-         </widget>
-        </item>
-        <item row="5" column="0">
-         <widget class="QLabel" name="localPortLabel">
-          <property name="text">
-           <string>本地端口</string>
-          </property>
-         </widget>
-        </item>
-        <item row="5" column="1">
-         <widget class="QLineEdit" name="localPortEdit">
-          <property name="inputMethodHints">
-           <set>Qt::ImhDigitsOnly|Qt::ImhPreferNumbers</set>
-          </property>
-          <property name="text">
-           <string>1080</string>
-          </property>
-         </widget>
-        </item>
-        <item row="6" column="0">
+        <item row="3" column="0">
          <widget class="QLabel" name="encryptLabel">
           <property name="text">
            <string>加密方式</string>
           </property>
          </widget>
         </item>
-        <item row="6" column="1">
+        <item row="3" column="1">
          <widget class="QComboBox" name="encryptComboBox">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -216,7 +161,7 @@
           </item>
          </widget>
         </item>
-        <item row="7" column="1">
+        <item row="4" column="1">
          <widget class="QCheckBox" name="otaCheckBox">
           <property name="toolTip">
            <string>Turn on one-time authentication and header verification (need server support)</string>
@@ -226,14 +171,14 @@
           </property>
          </widget>
         </item>
-        <item row="8" column="0">
+        <item row="5" column="0">
          <widget class="QLabel" name="timeoutLabel">
           <property name="text">
            <string>超时时间</string>
           </property>
          </widget>
         </item>
-        <item row="8" column="1">
+        <item row="5" column="1">
          <widget class="QSpinBox" name="timeoutSpinBox">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -255,6 +200,42 @@
           </property>
          </widget>
         </item>
+        <item row="6" column="0">
+         <widget class="QLabel" name="remarksLabel">
+          <property name="text">
+           <string>备注</string>
+          </property>
+         </widget>
+        </item>
+        <item row="6" column="1">
+         <widget class="QLineEdit" name="remarksEdit">
+          <property name="text">
+           <string/>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1">
+         <widget class="QSpinBox" name="serverPortSpinBox">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimum">
+           <number>1</number>
+          </property>
+          <property name="maximum">
+           <number>65535</number>
+          </property>
+          <property name="singleStep">
+           <number>1</number>
+          </property>
+          <property name="value">
+           <number>8388</number>
+          </property>
+         </widget>
+        </item>
        </layout>
       </widget>
      </item>
@@ -268,6 +249,9 @@
       <width>221</width>
       <height>301</height>
      </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">selection-background-color: rgb(86, 74, 255);</string>
     </property>
     <property name="editTriggers">
      <set>QAbstractItemView::NoEditTriggers</set>
@@ -385,6 +369,54 @@
     <hint type="destinationlabel">
      <x>614</x>
      <y>355</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>configlist</sender>
+   <signal>currentRowChanged(int)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>update()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>126</x>
+     <y>179</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>253</x>
+     <y>328</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>add_config</sender>
+   <signal>clicked()</signal>
+   <receiver>configlist</receiver>
+   <slot>scrollToBottom()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>81</x>
+     <y>343</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>80</x>
+     <y>177</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>add_config</sender>
+   <signal>clicked()</signal>
+   <receiver>configlist</receiver>
+   <slot>clearSelection()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>60</x>
+     <y>339</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>57</x>
+     <y>230</y>
     </hint>
    </hints>
   </connection>
