@@ -1,25 +1,25 @@
 {
   "useOnlinePac": false,
-  "global": false,
-  "isDefault": false,
-  "pacUrl": null,
-  "logViewer": null,
+  "enabled": true,
   "configs": [
     {
-      "server": "127.0.0.1",
-      "method": "aes-256-cfb",
-      "remarks": "example",
-      "timeout": 600,
-      "one_time_auth": false,
       "server_port": 8388,
+      "server": "127.0.0.1",
+      "timeout": 600,
+      "remarks": "example",
+      "method": "aes-256-cfb",
+      "one_time_auth": false,
       "password": "password"
     }
   ],
-  "autoCheckUpdate": false,
-  "shareOverLan": false,
-  "availabilityStatistics": false,
   "index": 0,
-  "strategy": null,
+  "autoCheckUpdate": false,
+  "global": false,
   "localPort": 1080,
-  "enabled": true
+  "isDefault": false,
+  "strategy": null,
+  "pacUrl": null,
+  "availabilityStatistics": false,
+  "logViewer": null,
+  "shareOverLan": false
 }

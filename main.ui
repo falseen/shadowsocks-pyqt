@@ -126,6 +126,11 @@
           </item>
           <item>
            <property name="text">
+            <string>chacha20-poly1305</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
             <string>aes-128-cfb</string>
            </property>
           </item>
@@ -157,6 +162,96 @@
           <item>
            <property name="text">
             <string>table</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>chacha20-ietf-poly1305</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>*xchacha20-ietf-poly1305</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>aes-128-gcm</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>aes-192-gcm</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>aes-256-gcm</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>aes-128-ctr</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>aes-192-ctr</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>aes-256-ctr</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>camellia-128-cfb</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>camellia-192-cfb</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>camellia-256-cfb</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>chacha20-ietf</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>bf-cfb</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>cast5-cfb</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>des-cfb</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>idea-cfb</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>rc2-cfb</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>seed-cfb</string>
            </property>
           </item>
          </widget>
