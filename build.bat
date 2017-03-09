@@ -1,0 +1,1 @@
+pyinstaller -F main.py --distpath build/output
