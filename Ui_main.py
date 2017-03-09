@@ -177,7 +177,7 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "shadowsocks-pyqt"))
         self.serverAddrLabel.setText(_translate("MainWindow", "服务器地址"))
         self.serverAddrEdit.setText(_translate("MainWindow", "127.0.0.1"))
         self.serverPortLabel.setText(_translate("MainWindow", "服务器端口"))
