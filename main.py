@@ -7,6 +7,7 @@ from PyQt5 import QtWidgets
 from PyQt5.QtCore import pyqtSlot
 from PyQt5.QtWidgets import QMainWindow, QSystemTrayIcon
 from PyQt5.QtGui import QIcon
+from PyQt5 import QtGui
 
 from Ui_main import Ui_MainWindow
 from shadowsocks import local as ss_local
@@ -80,6 +81,17 @@ def find_config(config_name):
     return None
 
 
+class MyLogHandler(logging.Handler):
+    def __init__(self, obj):
+        logging.Handler.__init__(self)
+        self.Object = obj
+
+    def emit(self, record):
+        if record.levelno<self.level: return
+        tstr = time.strftime('%Y-%m-%d %H:%M:%S.%U')
+        self.Object.append("[%s][%s] %s"%(tstr, record.levelname, record.getMessage()))
+
+
 class MainWindow(QMainWindow, Ui_MainWindow):
     """
     Class documentation goes here.
@@ -136,7 +148,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         sslocal_process = SendeventProcess(target=ss_local.main, daemon = True)
         sslocal_process.start()
         self.sslocal_process = sslocal_process
-        self.destroy()
 
     @pyqtSlot()
     def on_b_exit_clicked(self):
@@ -203,16 +214,25 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             else:  
                 self.hide()
 
+    def auto_scroll(self):
+        # 自动滚动
+        cursor =  self.loggingBrowser.textCursor()
+        cursor.movePosition(QtGui.QTextCursor.End)
+        self.loggingBrowser.setTextCursor(cursor)
+
 
 if __name__ == "__main__":
     try:
-        logging.getLogger('').handlers = []
+        logging.getLogger().handlers = []
         logging.basicConfig(level=logging.INFO,
                         format='%(asctime)s %(levelname)-8s %(message)s',
                         datefmt='%Y-%m-%d %H:%M:%S')
         multiprocessing.freeze_support()
         app = QtWidgets.QApplication(sys.argv)
         mySW = MainWindow()
+        handler = MyLogHandler(mySW.loggingBrowser)
+        logging.getLogger().addHandler(handler)
+        mySW.loggingBrowser.cursorPositionChanged.connect(mySW.auto_scroll)
         sslocal_process = SendeventProcess(target=ss_local.main, daemon = True)
         sslocal_process.start()
         mySW.sslocal_process = sslocal_process

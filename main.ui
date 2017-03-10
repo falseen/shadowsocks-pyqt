@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>561</width>
-    <height>412</height>
+    <width>555</width>
+    <height>587</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -420,7 +420,7 @@
    <widget class="QPushButton" name="b_yes">
     <property name="geometry">
      <rect>
-      <x>270</x>
+      <x>290</x>
       <y>330</y>
       <width>91</width>
       <height>61</height>
@@ -433,7 +433,7 @@
    <widget class="QPushButton" name="b_exit">
     <property name="geometry">
      <rect>
-      <x>410</x>
+      <x>430</x>
       <y>330</y>
       <width>91</width>
       <height>61</height>
@@ -441,6 +441,22 @@
     </property>
     <property name="text">
      <string>取消</string>
+    </property>
+   </widget>
+   <widget class="QTextBrowser" name="loggingBrowser">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>410</y>
+      <width>541</width>
+      <height>171</height>
+     </rect>
+    </property>
+    <property name="cursor" stdset="0">
+     <cursorShape>IBeamCursor</cursorShape>
+    </property>
+    <property name="focusPolicy">
+     <enum>Qt::ClickFocus</enum>
     </property>
    </widget>
    <zorder>gridLayoutWidget</zorder>
@@ -451,6 +467,7 @@
    <zorder>b_yes</zorder>
    <zorder>b_exit</zorder>
    <zorder>configlist</zorder>
+   <zorder>loggingBrowser</zorder>
   </widget>
  </widget>
  <tabstops>
