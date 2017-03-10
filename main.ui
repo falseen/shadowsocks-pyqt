@@ -453,6 +453,22 @@
    <zorder>configlist</zorder>
   </widget>
  </widget>
+ <tabstops>
+  <tabstop>serverAddrEdit</tabstop>
+  <tabstop>serverPortSpinBox</tabstop>
+  <tabstop>pwdEdit</tabstop>
+  <tabstop>encryptComboBox</tabstop>
+  <tabstop>otaCheckBox</tabstop>
+  <tabstop>timeoutSpinBox</tabstop>
+  <tabstop>remarksEdit</tabstop>
+  <tabstop>b_yes</tabstop>
+  <tabstop>b_exit</tabstop>
+  <tabstop>configlist</tabstop>
+  <tabstop>add_config</tabstop>
+  <tabstop>del_config</tabstop>
+  <tabstop>up</tabstop>
+  <tabstop>down</tabstop>
+ </tabstops>
  <resources/>
  <connections>
   <connection>

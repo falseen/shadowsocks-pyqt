@@ -1,1 +1,1 @@
-pyinstaller -F main.py --distpath build/output
+pyinstaller -F main.py --noupx --distpath build/output --add-data Shadowsocks_logo.png;'' -i shadowsocks.ico -w

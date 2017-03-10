@@ -176,6 +176,19 @@ class Ui_MainWindow(object):
         self.configlist.currentRowChanged['int'].connect(MainWindow.update)
         self.add_config.clicked.connect(self.configlist.scrollToBottom)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
+        MainWindow.setTabOrder(self.serverAddrEdit, self.serverPortSpinBox)
+        MainWindow.setTabOrder(self.serverPortSpinBox, self.pwdEdit)
+        MainWindow.setTabOrder(self.pwdEdit, self.encryptComboBox)
+        MainWindow.setTabOrder(self.encryptComboBox, self.otaCheckBox)
+        MainWindow.setTabOrder(self.otaCheckBox, self.timeoutSpinBox)
+        MainWindow.setTabOrder(self.timeoutSpinBox, self.remarksEdit)
+        MainWindow.setTabOrder(self.remarksEdit, self.b_yes)
+        MainWindow.setTabOrder(self.b_yes, self.b_exit)
+        MainWindow.setTabOrder(self.b_exit, self.configlist)
+        MainWindow.setTabOrder(self.configlist, self.add_config)
+        MainWindow.setTabOrder(self.add_config, self.del_config)
+        MainWindow.setTabOrder(self.del_config, self.up)
+        MainWindow.setTabOrder(self.up, self.down)
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
