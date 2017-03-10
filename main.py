@@ -136,7 +136,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         sslocal_process = SendeventProcess(target=ss_local.main, daemon = True)
         sslocal_process.start()
         self.sslocal_process = sslocal_process
-        self.destroy()
 
     @pyqtSlot()
     def on_b_exit_clicked(self):
