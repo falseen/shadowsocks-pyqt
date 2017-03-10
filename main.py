@@ -3,6 +3,9 @@
 """
 Module implementing MainWindow.
 """
+from __future__ import absolute_import, division, print_function, \
+    with_statement
+
 from PyQt5 import QtWidgets
 from PyQt5.QtCore import pyqtSlot
 from PyQt5.QtWidgets import QMainWindow, QSystemTrayIcon
@@ -62,13 +65,14 @@ class SendeventProcess(multiprocessing.Process):
 
 
 def read_json(config_path):
-    with open(config_path, "r") as f:
-        j = json.load(f, object_pairs_hook=collections.OrderedDict)
+    with open(config_path, "rb") as f:
+        ff = f.read().decode("utf-8")
+        j = json.loads(ff, object_hook=collections.OrderedDict)
     return j
 
 def save_json(config_path, json_dict):
-    with open(config_path , mode = 'w') as f : 
-        json.dump(json_dict,f, ensure_ascii = False ,indent=2)   
+    with open(config_path , mode = 'w', encoding="utf-8") as f : 
+        json.dump(json_dict,f, ensure_ascii = False ,indent=2)
 
 def find_config(config_name):
     config_path = config_name
@@ -78,6 +82,30 @@ def find_config(config_name):
     if os.path.exists(config_path):
         return config_path
     return None
+
+def to_bytes(s):
+    if bytes != str:
+        if type(s) == str:
+            return s.encode('utf-8')
+    return s
+
+
+def to_str(s):
+    if bytes != str:
+        if type(s) == bytes:
+            return s.decode('utf-8')
+    return s
+
+
+def check_config(config):
+    config['password'] = to_str(config.get('password', ''))
+    config['method'] = to_str(config.get('method', 'aes-256-cfb'))
+    config['port_password'] = config.get('port_password', None)
+    config['timeout'] = int(config.get('timeout', 300))
+    config['fast_open'] = config.get('fast_open', False)
+    config['one_time_auth'] = config.get('one_time_auth', False)
+    config['server_port'] = config.get('server_port', 8388)
+    return config
 
 
 class MainWindow(QMainWindow, Ui_MainWindow):
@@ -111,8 +139,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         index = self.configlist.currentRow()
         if index < len(gui_config["configs"]):
             gui_config["configs"][index] = new_config
-        else:    
+            gui_config["index"] = index
+        else:
             gui_config["configs"].append(new_config)
+        
         config_path = find_config("gui-config.json")
         if config_path == None:
             logging.error("config_path is None")
@@ -136,6 +166,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         sslocal_process = SendeventProcess(target=ss_local.main, daemon = True)
         sslocal_process.start()
         self.sslocal_process = sslocal_process
+        self.showMessage("配置已生效！")
+        self.destroy()
 
     @pyqtSlot()
     def on_b_exit_clicked(self):
@@ -193,14 +225,36 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.otaCheckBox.setChecked(one_time_auth)
         self.remarksEdit.setText(remarks)
 
-    def TuoPanEvent(self, reason):
+    def Tray_init(self):
+        self.tray = QSystemTrayIcon()
+        self.icon = QIcon('Shadowsocks_logo.png')
+        self.tray.setIcon(self.icon)
+        self.tray.activated[QSystemTrayIcon.ActivationReason].connect(self.TrayEvent)
+        self.tray_menu = QtWidgets.QMenu(QtWidgets.QApplication.desktop())
+        self.ShowAction = QtWidgets.QAction(u'还原 ', self, triggered=self.re_build)
+        self.QuitAction = QtWidgets.QAction(u'退出 ', self, triggered=self.app_quit)
+        self.tray_menu.addAction(self.ShowAction)
+        self.tray_menu.addAction(self.QuitAction)
+        self.tray.setContextMenu(self.tray_menu) #设置系统托盘菜单
+        self.tray.show()
+        self.showMessage("shadowsocks-pyqt 已经启动！")
+
+    def re_build(self):
+        self.hide()
+        self.update()
+        self.show()
+        self.activateWindow()
+    
+    def TrayEvent(self, reason):
         if reason == QSystemTrayIcon.DoubleClick:  
-            if self.isHidden():
-                self.update()
-                self.show()
-                self.activateWindow()
+            if self.isHidden() or self.destroyed:
+                self.re_build()
             else:  
                 self.hide()
+
+    def showMessage(self, text):
+        icon = self.tray.MessageIcon()
+        self.tray.showMessage(u'提示', text, icon,1000)
 
 
 if __name__ == "__main__":
@@ -211,35 +265,28 @@ if __name__ == "__main__":
                         datefmt='%Y-%m-%d %H:%M:%S')
         multiprocessing.freeze_support()
         app = QtWidgets.QApplication(sys.argv)
-        mySW = MainWindow()
+        My_App = MainWindow()
         sslocal_process = SendeventProcess(target=ss_local.main, daemon = True)
         sslocal_process.start()
-        mySW.sslocal_process = sslocal_process
+        My_App.sslocal_process = sslocal_process
         config_path = find_config("gui-config.json")
         if config_path == None:
             logging.error("config_path is None")
             raise
-        mySW.gui_config = read_json(config_path)
-        configlist = mySW.configlist
-        for x in mySW.gui_config.get("configs",{}):
+        My_App.gui_config = read_json(config_path)
+        configlist = My_App.configlist
+        for x in My_App.gui_config.get("configs",{}):
+            x = check_config(x)
             if x.get("remarks","") == "":
                 item_text = "%s:%s" %(x["server"], x["server_port"])
             else:
                 item_text = "%s (%s:%s)" %(x["remarks"],x["server"], x["server_port"])    
             configlist.addItem(item_text)
-        index = mySW.gui_config.get("index", 0)
+        index = My_App.gui_config.get("index", 0)
         configlist.setCurrentRow(index)
-        mySW.tray = QSystemTrayIcon()
-        mySW.icon = QIcon('Shadowsocks_logo.png')
-        mySW.tray.setIcon(mySW.icon)
-        mySW.tray.activated[QSystemTrayIcon.ActivationReason].connect(mySW.TuoPanEvent)
-        mySW.tray_menu = QtWidgets.QMenu(QtWidgets.QApplication.desktop())
-        mySW.QuitAction = QtWidgets.QAction(u'退出 ', mySW, triggered=mySW.app_quit)
-        mySW.tray_menu.addAction(mySW.QuitAction)
-        mySW.tray.setContextMenu(mySW.tray_menu) #设置系统托盘菜单
-        mySW.tray.show()
-        # mySW.update()
-        # mySW.show()
+        My_App.Tray_init()
+        # My_App.update()
+        # My_App.show()
         sys.exit(app.exec_())
     except Exception as e:
         logging.info(e)

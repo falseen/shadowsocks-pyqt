@@ -3,10 +3,10 @@
     {
       "server": "127.0.0.1",
       "server_port": 8388,
-      "one_time_auth": false,
       "password": "password",
-      "timeout": 600,
       "method": "aes-256-cfb",
+      "timeout": 600,
+      "one_time_auth": false,
       "remarks": "example"
     }
   ],
