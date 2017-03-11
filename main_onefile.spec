@@ -28,18 +28,12 @@ exe = EXE(pyz,
           console=False , icon='shadowsocks.ico')
 
 exe_debug = EXE(pyz,
+          a.datas,
           a.scripts,
-          exclude_binaries=True,
+          a.binaries,
+          a.zipfiles,
           name='shadowsocks-pyqt_debug',
           debug=False,
           strip=False,
           upx=False,
-          console=True , icon='shadowsocks.ico')
-
-coll_debug = COLLECT(exe_debug,
-               a.binaries,
-               a.zipfiles,
-               a.datas,
-               strip=False,
-               upx=False,
-               name='shadowsocks-pyqt_debug')
+          console=False , icon='shadowsocks.ico')
