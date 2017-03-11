@@ -1,4 +1,7 @@
 # shadowsocks-pyqt
+一个用**PyQt5**实现的**shadowsocks 客户端**, 可以在 windows、linux、MAC 等平台上运行，将来打算也支持安卓和ios平台。
+
+## 说明
 用pyqt5简单的包装了一下，里面的代码还是shadowsocks的，这样话就可以跟着python版的shadowsocks一起更新了，框架完成之后基本上就不用做什么改动了。理论上是跨平台的。目前已经在win32、win64、ubuntu32、ubuntu64上打包并测试通过，如果无法在你的系统下运行，请自行打包。
 
 界面看起来是这个样子的，功能比较简单，以后再慢慢完善吧。
@@ -20,7 +23,7 @@
   * windows 下可下载二进制文件安装。
 * 安装 pyinstaller
 * linux系统运行 build.sh 
-* windows系统运行 buils.bat
+* windows系统运行 build.bat
 * 打包之后的文件在 dist 文件夹。
 
 ## TODO
@@ -30,3 +33,4 @@
 * 二级代理
 * 流量显示。
 * 让ss作为全局代理。
+* 支持安卓和ios平台。
