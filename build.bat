@@ -1,2 +1,4 @@
+git submodule init
+git submodule update
 mv -f ./shadowsocks/shadowsocks/* ./shadowsocks/
-pyinstaller main.spec
+pyinstaller -y main.spec
