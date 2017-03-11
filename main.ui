@@ -15,7 +15,7 @@
   </property>
   <property name="windowIcon">
    <iconset>
-    <normaloff>Shadowsocks_logo.png</normaloff>Shadowsocks_logo.png</iconset>
+    <normaloff>res/Shadowsocks_logo.png</normaloff>res/Shadowsocks_logo.png</iconset>
   </property>
   <widget class="QWidget" name="centralWidget">
    <widget class="QWidget" name="gridLayoutWidget">

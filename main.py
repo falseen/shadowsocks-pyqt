@@ -227,7 +227,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def Tray_init(self):
         self.tray = QSystemTrayIcon()
-        self.icon = QIcon('Shadowsocks_logo.png')
+        self.icon = QIcon('res/Shadowsocks_logo.png')
         self.tray.setIcon(self.icon)
         self.tray.activated[QSystemTrayIcon.ActivationReason].connect(self.TrayEvent)
         self.tray_menu = QtWidgets.QMenu(QtWidgets.QApplication.desktop())
