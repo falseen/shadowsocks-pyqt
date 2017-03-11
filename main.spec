@@ -23,7 +23,7 @@ exe = EXE(pyz,
           debug=False,
           strip=False,
           upx=False,
-          console=False , icon='shadowsocks.ico')
+          console=False , icon='res/shadowsocks.ico')
 
 coll = COLLECT(exe,
                a.binaries,
@@ -40,7 +40,7 @@ exe_debug = EXE(pyz,
           debug=False,
           strip=False,
           upx=False,
-          console=True , icon='shadowsocks.ico')
+          console=True , icon='res/shadowsocks.ico')
 
 coll_debug = COLLECT(exe_debug,
                a.binaries,

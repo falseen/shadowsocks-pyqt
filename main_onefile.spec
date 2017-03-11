@@ -6,7 +6,7 @@ block_cipher = None
 a = Analysis(['main.py'],
              pathex=[''],
              binaries=[],
-             datas=[],
+             datas=[('res/Shadowsocks_logo.png', 'res')],
              hiddenimports=[],
              hookspath=[],
              runtime_hooks=[],
@@ -25,4 +25,4 @@ exe = EXE(pyz,
           debug=False,
           strip=False,
           upx=False,
-          console=False , icon='shadowsocks.ico')
+          console=False , icon='res/shadowsocks.ico')

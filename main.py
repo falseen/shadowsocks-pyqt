@@ -67,7 +67,7 @@ class SendeventProcess(multiprocessing.Process):
 def read_json(config_path):
     with open(config_path, "rb") as f:
         ff = f.read().decode("utf-8")
-        j = json.loads(ff, object_hook=collections.OrderedDict)
+        j = json.loads(ff, object_pairs_hook=collections.OrderedDict)
     return j
 
 def save_json(config_path, json_dict):
@@ -227,7 +227,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def Tray_init(self):
         self.tray = QSystemTrayIcon()
-        self.icon = QIcon('res/Shadowsocks_logo.png')
+        self.icon = self.windowIcon()
         self.tray.setIcon(self.icon)
         self.tray.activated[QSystemTrayIcon.ActivationReason].connect(self.TrayEvent)
         self.tray_menu = QtWidgets.QMenu(QtWidgets.QApplication.desktop())
