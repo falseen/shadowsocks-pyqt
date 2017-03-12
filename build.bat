@@ -1,4 +1,4 @@
--rd /S /Q dist
+rd /S /Q dist
 git submodule init
 git submodule update
 move /Y .\shadowsocks\shadowsocks\* shadowsocks\
