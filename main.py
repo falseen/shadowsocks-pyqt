@@ -12,6 +12,7 @@ from PyQt5.QtWidgets import QMainWindow, QSystemTrayIcon
 from PyQt5.QtGui import QIcon
 
 from Ui_main import Ui_MainWindow
+from Ui_logwindow import Ui_LogWindow
 from shadowsocks import local as ss_local
 import sys
 import os
@@ -21,6 +22,8 @@ import time
 import collections
 import threading
 import types
+import tail_log
+
 
 # Module multiprocessing is organized differently in Python 3.4+
 try:
@@ -60,7 +63,6 @@ if sys.platform.startswith('win'):
 # Example for testing multiprocessing.
 
 import multiprocessing
-from multiprocessing import Queue
 
 class SendeventProcess(multiprocessing.Process):
     def __init__(self, *args, **kwrg):
@@ -124,15 +126,15 @@ def new_class_method(_class, method_name, new_method):
 
 
 # 动态patch实例方法
-def new_self_method(self, method_name, new_method, log_queue, level):
+def new_self_method(self, method_name, new_method, logpath):
     method = getattr(self, method_name)
     info = sys.version_info
     if info[0] >= 3:
         setattr(self, method_name, types.MethodType(\
-                lambda *args, **kwds: new_method(method, log_queue, level, *args, **kwds), self))
+                lambda *args, **kwds: new_method(method, logpath, *args, **kwds), self))
     else:
         setattr(self, method_name, types.MethodType(\
-                lambda *args, **kwds: new_method(method, log_queue, level, *args, **kwds), self, self))
+                lambda *args, **kwds: new_method(method, logpath, *args, **kwds), self, self))
 
 
 class MainWindow(QMainWindow, Ui_MainWindow):
@@ -141,17 +143,21 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def __init__(self, parent=None):
         super(MainWindow, self).__init__(parent)
         self.setupUi(self)
-        self.log_queue = Queue()
-
+        self.logpath = "sslocal.log"
 
     def start(self):
-        self.mysin.connect(self.loggingBrowser.append)
-        sslocal_process = SendeventProcess(target=Shadowsocks_Process, args=(self.log_queue,), daemon = True)
+        with open(self.logpath, "w") as file_:
+            file_.write("shadowsocks-pyqt is started\n")
+        logging.getLogger('').handlers = []
+        logging.basicConfig(level=logging.INFO,
+                        format='%(asctime)s %(levelname)-8s %(message)s',
+                        datefmt='%Y-%m-%d %H:%M:%S',
+                        filename = self.logpath,
+                        filemode = "a")
+        self.logwindow = LogWindow(self.logpath)
+        sslocal_process = SendeventProcess(target=Shadowsocks_Process, args=(self.logpath,), daemon = True)
         sslocal_process.start()
-        threading.Thread(target=self.loggingBrowser_slot, daemon = True).start()
         self.sslocal_process = sslocal_process
-        handler = MyLogHandler(self.mysin)
-        logging.getLogger('').addHandler(handler)
         config_path = find_config("gui-config.json")
         if config_path == None:
             logging.error("config_path is None")
@@ -209,11 +215,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.sslocal_process.join()
         self.save_config()
         logging.info("restart ss-local")
-        sslocal_process = SendeventProcess(target=Shadowsocks_Process, args=(self.log_queue,), daemon = True)
+        sslocal_process = SendeventProcess(target=Shadowsocks_Process, args=(self.logpath,), daemon = True)
         sslocal_process.start()
         self.sslocal_process = sslocal_process
-        self.showMessage("配置已生效！")
-        # self.destroy()
+        self.showMessage(u"配置已生效！")
+        #self.destroy()
 
     @pyqtSlot()
     def on_b_exit_clicked(self):
@@ -222,6 +228,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def app_quit(self):
         self.sslocal_process.terminate()
         self.sslocal_process.join()
+        self.tray.hide()
         sys.exit()
 
     def closeEvent(self, event):
@@ -271,14 +278,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.otaCheckBox.setChecked(one_time_auth)
         self.remarksEdit.setText(remarks)
 
-    def loggingBrowser_slot(self):
-        while True:
-            time.sleep(0.1)
-            if not self.log_queue.empty():
-                text = self.log_queue.get()
-                self.mysin.emit(text)
-
-
     def Tray_init(self):
         self.tray = QSystemTrayIcon()
         self.icon = self.windowIcon()
@@ -286,13 +285,16 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.tray.activated[QSystemTrayIcon.ActivationReason].connect(self.TrayEvent)
         self.tray_menu = QtWidgets.QMenu(QtWidgets.QApplication.desktop())
         self.ShowAction = QtWidgets.QAction(u'还原 ', self, triggered=self.re_build)
+        self.ShowLog = QtWidgets.QAction(u'查看日志 ', self, triggered=self.logwindow.showlog)
         self.QuitAction = QtWidgets.QAction(u'退出 ', self, triggered=self.app_quit)
+        self.tray_menu.addAction(self.ShowLog)
         self.tray_menu.addAction(self.ShowAction)
         self.tray_menu.addAction(self.QuitAction)
         self.tray.setContextMenu(self.tray_menu) #设置系统托盘菜单
         self.tray.show()
-        self.showMessage("shadowsocks-pyqt 已经启动！")
+        self.showMessage(u"shadowsocks-pyqt 已经启动！")
 
+    
     def re_build(self):
         self.hide()
         self.update()
@@ -310,6 +312,26 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         icon = self.tray.MessageIcon()
         self.tray.showMessage(u'提示', text, icon,1000)
 
+class LogWindow(QMainWindow, Ui_LogWindow):
+    log_sin = pyqtSignal(str)
+    def __init__(self, logpath, parent=None):
+        super(LogWindow, self).__init__(parent)
+        self.setupUi(self)
+        self.log_sin.connect(self.LogBrowser.append)
+        self.tail_log = tail_log.Tail(logpath)
+        self.tail_log.register_callback(self.log_sin.emit)
+    
+    def showlog(self):
+        self.show()
+        if not self.tail_log.is_start:
+            self.showlog_thread = threading.Thread(\
+                    target = self.tail_log.follow, kwargs={"s": 1}, daemon=True).start()
+
+    def closeEvent(self, event):
+        self.tail_log.is_stop = True
+        if hasattr(self.showlog_thread, "join"):
+            self.showlog_thread.join()
+        self.is_start = False
 
 class MyLogHandler(logging.Handler):
     def __init__(self, obj):
@@ -321,40 +343,36 @@ class MyLogHandler(logging.Handler):
         self.obj.emit("%s %s %s"%(tstr, record.levelname, record.getMessage()))
 
 
-def new_info_error_warn(orgin_method, log_queue, level, self, *args, **kwds):
-    tstr = time.strftime('%Y-%m-%d %H:%M:%S.%U')
-    if len(args) > 1:
-        new_args = args[0] % args[1:]
-    else:
-        new_args = args[0]
-    text = "%s %s %s"%(tstr, level, new_args)
-    log_queue.put(text)
+def new_basicConfig(orgin_method, logpath, self, *args, **kwds):
+    kwds["filename"] = logpath
+    kwds["filemode"] = "a"
     orgin_method(*args, **kwds)
+    console = logging.StreamHandler()
+    console.setLevel(logging.INFO)
+    datefmt='%Y-%m-%d %H:%M:%S'
+    formatter = logging.Formatter('%(asctime)s %(levelname)-8s %(message)s', datefmt = datefmt)
+    console.setFormatter(formatter)
+    logging.getLogger('').addHandler(console)
 
-def Shadowsocks_Process(log_queue):
+
+def Shadowsocks_Process(logpath):
     logging.getLogger('').handlers = []
     logging.basicConfig(level=logging.INFO,
                     format='%(asctime)s %(levelname)-8s %(message)s',
-                    datefmt='%Y-%m-%d %H:%M:%S')
-    new_self_method(logging, "info", new_info_error_warn, log_queue, "INFO")
-    new_self_method(logging, "error", new_info_error_warn, log_queue, "ERROR")
-    new_self_method(logging, "warning", new_info_error_warn, log_queue, "WARNING")
-    new_self_method(logging, "warn", new_info_error_warn, log_queue, "WARNING")
-    new_self_method(logging, "debug", new_info_error_warn, log_queue, "DEBUG")
-    logging.log_queue = log_queue
+                    datefmt='%Y-%m-%d %H:%M:%S',
+                    filename = logpath,
+                    filemode = "a")
+    new_self_method(logging, "basicConfig", new_basicConfig, logpath)
     ss_local.main()
 
 if __name__ == "__main__":
     try:
-        logging.getLogger('').handlers = []
-        logging.basicConfig(level=logging.INFO,
-                        format='%(asctime)s %(levelname)-8s %(message)s',
-                        datefmt='%Y-%m-%d %H:%M:%S')
         multiprocessing.freeze_support()
         app = QtWidgets.QApplication(sys.argv)
         My_App = MainWindow()
         My_App.start()
         My_App.Tray_init()
+        app.setQuitOnLastWindowClosed(False)
         # My_App.update()
         # My_App.show()
         sys.exit(app.exec_())

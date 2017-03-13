@@ -43,3 +43,6 @@ venv/
 
 #eric6
 _eric6project
+
+#shadowsocks-pyqt tmp file
+sslocal.log

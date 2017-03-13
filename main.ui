@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>561</width>
-    <height>569</height>
+    <height>409</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -420,8 +420,8 @@
    <widget class="QPushButton" name="b_yes">
     <property name="geometry">
      <rect>
-      <x>270</x>
-      <y>330</y>
+      <x>290</x>
+      <y>320</y>
       <width>91</width>
       <height>61</height>
      </rect>
@@ -433,27 +433,14 @@
    <widget class="QPushButton" name="b_exit">
     <property name="geometry">
      <rect>
-      <x>410</x>
-      <y>330</y>
+      <x>430</x>
+      <y>320</y>
       <width>91</width>
       <height>61</height>
      </rect>
     </property>
     <property name="text">
      <string>取消</string>
-    </property>
-   </widget>
-   <widget class="QTextBrowser" name="loggingBrowser">
-    <property name="enabled">
-     <bool>true</bool>
-    </property>
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>411</y>
-      <width>541</width>
-      <height>151</height>
-     </rect>
     </property>
    </widget>
    <zorder>gridLayoutWidget</zorder>
@@ -464,7 +451,6 @@
    <zorder>b_yes</zorder>
    <zorder>b_exit</zorder>
    <zorder>configlist</zorder>
-   <zorder>loggingBrowser</zorder>
   </widget>
  </widget>
  <tabstops>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>LogWindow</class>
+ <widget class="QMainWindow" name="LogWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>800</width>
+    <height>431</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>日志查看器</string>
+  </property>
+  <property name="windowIcon">
+   <iconset>
+    <normaloff>res/Shadowsocks_logo.png</normaloff>res/Shadowsocks_logo.png</iconset>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QTextBrowser" name="LogBrowser">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>10</y>
+      <width>781</width>
+      <height>411</height>
+     </rect>
+    </property>
+   </widget>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
