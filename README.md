@@ -26,13 +26,13 @@
   * ubuntu下可通过 `sudo apt-get install python3-pyqt5` 命令安装。
   * windows 下可下载二进制文件安装。
 * 安装 pyinstaller
-* linux系统运行 build.sh 
-* windows系统运行 build.bat
+* 运行 build.bat
 * 打包之后的文件在 dist 文件夹。
 
 ## 更新记录：
 * 新增查看日志的功能。
 * 修复托盘不会自动消失的问题。
+* 删除了windows的build.bat文件，把build.sh改成了build.bat。统一用这个脚本打包。windows的命令太蛋疼了，不想折腾了。windows安装了git之后添加一下环境变量就可以用这个脚本了。
 
 ## TODO
 * ~~日志显示功能。~~
