@@ -2,8 +2,8 @@ rm -rf ./dist/*
 git submodule init
 git submodule update
 mv -f ./shadowsocks/shadowsocks/* ./shadowsocks/
-pyinstaller --distpath dist/files -y main.spec
-pyinstaller -y main_onefile.spec
+pyinstaller --clean --distpath dist/files -y main.spec
+pyinstaller --clean -y main_onefile.spec
 cd dist
 mkdir shadowsocks_tmp
 mv shadowsocks-pyqt* shadowsocks_tmp/
