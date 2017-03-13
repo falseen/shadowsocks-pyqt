@@ -14,14 +14,18 @@
 
 * python3
 * PyQt5
+* git
 
 ## 运行：
-* **安装python3和PyQt5，然后运行main文件：`python3 main.py`**
+* **安装依赖，初始化子模块（即更新shadowsocks，也可以手动下载放入）**：
+  * git submodule init
+  * git submodule update
+* **运行main文件：`python3 main.py`**
 * **配置文件都保存在程序所在的文件夹，程序启动后会直接会读取config.json里面的配置，然后执行local.py，执行过程跟原版一样。**
 
 ## 打包：
 
-* 安装 python3
+* 安装 python3 和 git
 * 安装 PyQt5 
   * ubuntu下可通过 `sudo apt-get install python3-pyqt5` 命令安装。
   * windows 下可下载二进制文件安装。
