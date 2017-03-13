@@ -219,7 +219,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         sslocal_process.start()
         self.sslocal_process = sslocal_process
         self.showMessage(u"配置已生效！")
-        #self.destroy()
+        self.destroy()
 
     @pyqtSlot()
     def on_b_exit_clicked(self):
