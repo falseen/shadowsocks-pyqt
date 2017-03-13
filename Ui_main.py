@@ -11,7 +11,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(561, 412)
+        MainWindow.resize(561, 569)
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap("res/Shadowsocks_logo.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         MainWindow.setWindowIcon(icon)
@@ -161,6 +161,10 @@ class Ui_MainWindow(object):
         self.b_exit = QtWidgets.QPushButton(self.centralWidget)
         self.b_exit.setGeometry(QtCore.QRect(410, 330, 91, 61))
         self.b_exit.setObjectName("b_exit")
+        self.loggingBrowser = QtWidgets.QTextBrowser(self.centralWidget)
+        self.loggingBrowser.setEnabled(True)
+        self.loggingBrowser.setGeometry(QtCore.QRect(10, 411, 541, 151))
+        self.loggingBrowser.setObjectName("loggingBrowser")
         self.gridLayoutWidget.raise_()
         self.add_config.raise_()
         self.del_config.raise_()
@@ -169,6 +173,7 @@ class Ui_MainWindow(object):
         self.b_yes.raise_()
         self.b_exit.raise_()
         self.configlist.raise_()
+        self.loggingBrowser.raise_()
         MainWindow.setCentralWidget(self.centralWidget)
 
         self.retranslateUi(MainWindow)

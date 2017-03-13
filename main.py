@@ -7,7 +7,7 @@ from __future__ import absolute_import, division, print_function, \
     with_statement
 
 from PyQt5 import QtWidgets
-from PyQt5.QtCore import pyqtSlot
+from PyQt5.QtCore import pyqtSlot, pyqtSignal
 from PyQt5.QtWidgets import QMainWindow, QSystemTrayIcon
 from PyQt5.QtGui import QIcon
 
@@ -19,6 +19,8 @@ import json
 import logging
 import time
 import collections
+import threading
+import types
 
 # Module multiprocessing is organized differently in Python 3.4+
 try:
@@ -58,6 +60,7 @@ if sys.platform.startswith('win'):
 # Example for testing multiprocessing.
 
 import multiprocessing
+from multiprocessing import Queue
 
 class SendeventProcess(multiprocessing.Process):
     def __init__(self, *args, **kwrg):
@@ -108,19 +111,62 @@ def check_config(config):
     return config
 
 
+# 动态patch类方法
+def new_class_method(_class, method_name, new_method):
+    method = getattr(_class, method_name)
+    info = sys.version_info
+    if info[0] >= 3:
+        setattr(_class, method_name,
+                types.MethodType(lambda *args, **kwds: new_method(method, *args, **kwds), _class))
+    else:
+        setattr(_class, method_name,
+                types.MethodType(lambda *args, **kwds: new_method(method, *args, **kwds), None, _class))
+
+
+# 动态patch实例方法
+def new_self_method(self, method_name, new_method, log_queue, level):
+    method = getattr(self, method_name)
+    info = sys.version_info
+    if info[0] >= 3:
+        setattr(self, method_name, types.MethodType(\
+                lambda *args, **kwds: new_method(method, log_queue, level, *args, **kwds), self))
+    else:
+        setattr(self, method_name, types.MethodType(\
+                lambda *args, **kwds: new_method(method, log_queue, level, *args, **kwds), self, self))
+
+
 class MainWindow(QMainWindow, Ui_MainWindow):
-    """
-    Class documentation goes here.
-    """
+
+    mysin = pyqtSignal(str)
     def __init__(self, parent=None):
-        """
-        Constructor
-        
-        @param parent reference to the parent widget
-        @type QWidget
-        """
         super(MainWindow, self).__init__(parent)
         self.setupUi(self)
+        self.log_queue = Queue()
+
+
+    def start(self):
+        self.mysin.connect(self.loggingBrowser.append)
+        sslocal_process = SendeventProcess(target=Shadowsocks_Process, args=(self.log_queue,), daemon = True)
+        sslocal_process.start()
+        threading.Thread(target=self.loggingBrowser_slot, daemon = True).start()
+        self.sslocal_process = sslocal_process
+        handler = MyLogHandler(self.mysin)
+        logging.getLogger('').addHandler(handler)
+        config_path = find_config("gui-config.json")
+        if config_path == None:
+            logging.error("config_path is None")
+            raise
+        self.gui_config = read_json(config_path)
+        configlist = self.configlist
+        for x in self.gui_config.get("configs",{}):
+            x = check_config(x)
+            if x.get("remarks","") == "":
+                item_text = "%s:%s" %(x["server"], x["server_port"])
+            else:
+                item_text = "%s (%s:%s)" %(x["remarks"],x["server"], x["server_port"])    
+            configlist.addItem(item_text)
+        index = self.gui_config.get("index", 0)
+        configlist.setCurrentRow(index)
 
     def save_config(self):
         new_config = collections.OrderedDict()
@@ -163,11 +209,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.sslocal_process.join()
         self.save_config()
         logging.info("restart ss-local")
-        sslocal_process = SendeventProcess(target=ss_local.main, daemon = True)
+        sslocal_process = SendeventProcess(target=Shadowsocks_Process, args=(self.log_queue,), daemon = True)
         sslocal_process.start()
         self.sslocal_process = sslocal_process
         self.showMessage("配置已生效！")
-        self.destroy()
+        # self.destroy()
 
     @pyqtSlot()
     def on_b_exit_clicked(self):
@@ -225,6 +271,14 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.otaCheckBox.setChecked(one_time_auth)
         self.remarksEdit.setText(remarks)
 
+    def loggingBrowser_slot(self):
+        while True:
+            time.sleep(0.1)
+            if not self.log_queue.empty():
+                text = self.log_queue.get()
+                self.mysin.emit(text)
+
+
     def Tray_init(self):
         self.tray = QSystemTrayIcon()
         self.icon = self.windowIcon()
@@ -257,6 +311,39 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.tray.showMessage(u'提示', text, icon,1000)
 
 
+class MyLogHandler(logging.Handler):
+    def __init__(self, obj):
+        logging.Handler.__init__(self)
+        self.obj = obj
+
+    def emit(self, record):
+        tstr = time.strftime('%Y-%m-%d %H:%M:%S.%U')
+        self.obj.emit("%s %s %s"%(tstr, record.levelname, record.getMessage()))
+
+
+def new_info_error_warn(orgin_method, log_queue, level, self, *args, **kwds):
+    tstr = time.strftime('%Y-%m-%d %H:%M:%S.%U')
+    if len(args) > 1:
+        new_args = args[0] % args[1:]
+    else:
+        new_args = args[0]
+    text = "%s %s %s"%(tstr, level, new_args)
+    log_queue.put(text)
+    orgin_method(*args, **kwds)
+
+def Shadowsocks_Process(log_queue):
+    logging.getLogger('').handlers = []
+    logging.basicConfig(level=logging.INFO,
+                    format='%(asctime)s %(levelname)-8s %(message)s',
+                    datefmt='%Y-%m-%d %H:%M:%S')
+    new_self_method(logging, "info", new_info_error_warn, log_queue, "INFO")
+    new_self_method(logging, "error", new_info_error_warn, log_queue, "ERROR")
+    new_self_method(logging, "warning", new_info_error_warn, log_queue, "WARNING")
+    new_self_method(logging, "warn", new_info_error_warn, log_queue, "WARNING")
+    new_self_method(logging, "debug", new_info_error_warn, log_queue, "DEBUG")
+    logging.log_queue = log_queue
+    ss_local.main()
+
 if __name__ == "__main__":
     try:
         logging.getLogger('').handlers = []
@@ -266,28 +353,14 @@ if __name__ == "__main__":
         multiprocessing.freeze_support()
         app = QtWidgets.QApplication(sys.argv)
         My_App = MainWindow()
-        sslocal_process = SendeventProcess(target=ss_local.main, daemon = True)
-        sslocal_process.start()
-        My_App.sslocal_process = sslocal_process
-        config_path = find_config("gui-config.json")
-        if config_path == None:
-            logging.error("config_path is None")
-            raise
-        My_App.gui_config = read_json(config_path)
-        configlist = My_App.configlist
-        for x in My_App.gui_config.get("configs",{}):
-            x = check_config(x)
-            if x.get("remarks","") == "":
-                item_text = "%s:%s" %(x["server"], x["server_port"])
-            else:
-                item_text = "%s (%s:%s)" %(x["remarks"],x["server"], x["server_port"])    
-            configlist.addItem(item_text)
-        index = My_App.gui_config.get("index", 0)
-        configlist.setCurrentRow(index)
+        My_App.start()
         My_App.Tray_init()
         # My_App.update()
         # My_App.show()
         sys.exit(app.exec_())
-    except Exception as e:
+    except BaseException as e:
         logging.info(e)
         raise
+    finally:
+        My_App.sslocal_process.terminate()
+        My_App.sslocal_process.join()    

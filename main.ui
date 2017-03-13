@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>561</width>
-    <height>412</height>
+    <height>569</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -443,6 +443,19 @@
      <string>取消</string>
     </property>
    </widget>
+   <widget class="QTextBrowser" name="loggingBrowser">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>411</y>
+      <width>541</width>
+      <height>151</height>
+     </rect>
+    </property>
+   </widget>
    <zorder>gridLayoutWidget</zorder>
    <zorder>add_config</zorder>
    <zorder>del_config</zorder>
@@ -451,6 +464,7 @@
    <zorder>b_yes</zorder>
    <zorder>b_exit</zorder>
    <zorder>configlist</zorder>
+   <zorder>loggingBrowser</zorder>
   </widget>
  </widget>
  <tabstops>
