@@ -24,7 +24,7 @@
       <x>250</x>
       <y>10</y>
       <width>291</width>
-      <height>324</height>
+      <height>328</height>
      </rect>
     </property>
     <layout class="QGridLayout" name="gridLayout">
@@ -376,14 +376,14 @@
          </widget>
         </item>
         <item row="8" column="0">
-         <widget class="QLabel" name="localaddresLabel">
+         <widget class="QLabel" name="localaddressLabel">
           <property name="text">
            <string>本地 IP</string>
           </property>
          </widget>
         </item>
         <item row="8" column="1">
-         <widget class="QLineEdit" name="localaddresEdit">
+         <widget class="QLineEdit" name="localaddressEdit">
           <property name="text">
            <string>127.0.0.1</string>
           </property>

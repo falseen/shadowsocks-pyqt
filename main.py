@@ -103,13 +103,15 @@ def to_str(s):
 
 
 def check_config(config):
+    config['server_port'] = config.get('server_port', 8388)
     config['password'] = to_str(config.get('password', ''))
-    config['method'] = to_str(config.get('method', 'aes-256-cfb'))
+    config['local_port'] = config.get('local_port', 1080)
     config['port_password'] = config.get('port_password', None)
     config['timeout'] = int(config.get('timeout', 300))
+    config['method'] = to_str(config.get('method', 'aes-256-cfb'))
+    config['local_address'] = to_str(config.get('local_address', '127.0.0.1'))
     config['fast_open'] = config.get('fast_open', False)
     config['one_time_auth'] = config.get('one_time_auth', False)
-    config['server_port'] = config.get('server_port', 8388)
     return config
 
 
@@ -139,7 +141,6 @@ def new_self_method(self, method_name, new_method, logpath):
 
 class MainWindow(QMainWindow, Ui_MainWindow):
 
-    mysin = pyqtSignal(str)
     def __init__(self, parent=None):
         super(MainWindow, self).__init__(parent)
         self.setupUi(self)
@@ -179,10 +180,14 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         gui_config = self.gui_config
         new_config["server"] = self.serverAddrEdit.text()
         new_config["server_port"] = self.serverPortSpinBox.value()
+        new_config["local_port"] = self.localportSpinBox.value()
         new_config["password"] = self.pwdEdit.text()
-        new_config["method"] = self.encryptComboBox.currentText()
         new_config["timeout"] = self.timeoutSpinBox.value()
+        new_config["method"] = self.encryptComboBox.currentText()
+        new_config["local_address"] = self.localaddressEdit.text()
         new_config["one_time_auth"] = self.otaCheckBox.isChecked()
+        new_config["fast_open"] = self.fastopenCheckBox.isChecked()
+
         config_path = find_config("config.json")
         if config_path == None:
             logging.error("config_path is None")
@@ -250,11 +255,15 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.configlist.addItem("127.0.0.1")
         new_config["server"] = "127.0.0.1"
         new_config["server_port"] = 1080
+        new_config["local_port"] = 1080
         new_config["password"] = "password"
-        new_config["method"] = "aes-256-cfb"
         new_config["timeout"] = 600
+        new_config["method"] = "aes-256-cfb"
+        new_config["local_address"] = "127.0.0.1"
         new_config["one_time_auth"] = False
+        new_config["fast_open"] = False
         new_config["remarks"] = ""
+
         self.gui_config["configs"].append(new_config)
         self.configlist.setCurrentRow(count)
         self.update()
@@ -263,12 +272,16 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         user_json = self.gui_config
         index = self.configlist.currentRow()
         select_config = user_json["configs"][index]
+        select_config = check_config(select_config)
         remarks = select_config.get("remarks","")
         server_addr = select_config["server"]
         server_port = select_config["server_port"]
         password = select_config["password"]
         method = select_config["method"]
         timeout = select_config["timeout"]
+        local_address = select_config["local_address"]
+        local_port = select_config["local_port"]
+        fast_open = select_config["fast_open"]
         one_time_auth = select_config["one_time_auth"]
         self.serverAddrEdit.setText(server_addr)
         self.serverPortSpinBox.setValue(int(server_port))
@@ -277,6 +290,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.timeoutSpinBox.setValue(timeout)
         self.otaCheckBox.setChecked(one_time_auth)
         self.remarksEdit.setText(remarks)
+        self.localaddressEdit.setText(local_address)
+        self.localportSpinBox.setValue(local_port)
+        self.fastopenCheckBox.setChecked(fast_open)
 
     def Tray_init(self):
         self.tray = QSystemTrayIcon()
