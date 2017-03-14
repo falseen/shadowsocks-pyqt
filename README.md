@@ -20,6 +20,9 @@
 * **安装依赖，初始化子模块（即更新shadowsocks，也可以手动下载放入）**：
   * git submodule init
   * git submodule update
+* **把shadowsocks/shadowsocks下的所有文件夹都移到shadowsocks文件夹下**：
+
+  * mv -f ./shadowsocks/shadowsocks/* ./shadowsocks/
 * **运行main文件：`python3 main.py`**
 * **配置文件都保存在程序所在的文件夹，程序启动后会直接会读取config.json里面的配置，然后执行local.py，执行过程跟原版一样。**
 
