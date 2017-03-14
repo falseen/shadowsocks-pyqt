@@ -145,16 +145,18 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         super(MainWindow, self).__init__(parent)
         self.setupUi(self)
         self.logpath = "sslocal.log"
-
-    def start(self):
-        with open(self.logpath, "w") as file_:
-            file_.write("shadowsocks-pyqt is started\n")
         logging.getLogger('').handlers = []
         logging.basicConfig(level=logging.INFO,
                         format='%(asctime)s %(levelname)-8s %(message)s',
                         datefmt='%Y-%m-%d %H:%M:%S',
                         filename = self.logpath,
                         filemode = "a")
+
+    def start(self):
+        with open(self.logpath, "w") as file_:
+            file_.write("shadowsocks-pyqt is started\n")
+        if sys.platform.startswith('win'):
+            self.fastopenCheckBox.setEnabled(False)
         self.logwindow = LogWindow(self.logpath)
         sslocal_process = SendeventProcess(target=Shadowsocks_Process, args=(self.logpath,), daemon = True)
         sslocal_process.start()
@@ -392,8 +394,8 @@ if __name__ == "__main__":
         # My_App.update()
         # My_App.show()
         sys.exit(app.exec_())
-    except BaseException as e:
-        logging.info(e)
+    except Exception as e:
+        print(e)
         raise
     finally:
         My_App.sslocal_process.terminate()
