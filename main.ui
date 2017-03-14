@@ -447,7 +447,7 @@
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">selection-background-color: rgb(86, 74, 255);</string>
+     <string notr="true"/>
     </property>
     <property name="editTriggers">
      <set>QAbstractItemView::NoEditTriggers</set>

@@ -178,7 +178,7 @@ class Ui_MainWindow(object):
         self.gridLayout.addWidget(self.editFrame, 1, 0, 1, 1)
         self.configlist = QtWidgets.QListWidget(self.centralWidget)
         self.configlist.setGeometry(QtCore.QRect(10, 10, 221, 311))
-        self.configlist.setStyleSheet("selection-background-color: rgb(86, 74, 255);")
+        self.configlist.setStyleSheet("")
         self.configlist.setEditTriggers(QtWidgets.QAbstractItemView.NoEditTriggers)
         self.configlist.setTabKeyNavigation(False)
         self.configlist.setSelectionMode(QtWidgets.QAbstractItemView.SingleSelection)
