@@ -130,22 +130,12 @@
           </item>
           <item>
            <property name="text">
-            <string>chacha20-poly1305</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
             <string>aes-128-cfb</string>
            </property>
           </item>
           <item>
            <property name="text">
             <string>aes-192-cfb</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>salsa20</string>
            </property>
           </item>
           <item>
@@ -170,12 +160,7 @@
           </item>
           <item>
            <property name="text">
-            <string>chacha20-ietf-poly1305</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>*xchacha20-ietf-poly1305</string>
+            <string>xchacha20-ietf-poly1305</string>
            </property>
           </item>
           <item>
@@ -206,6 +191,36 @@
           <item>
            <property name="text">
             <string>aes-256-ctr</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>aes-128-ocb</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>aes-192-ocb</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>aes-256-ocb</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>salsa20</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>chacha20-ietf-poly1305</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>chacha20-poly1305</string>
            </property>
           </item>
           <item>
