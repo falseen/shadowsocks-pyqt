@@ -6,7 +6,7 @@
 
 界面看起来是这个样子的，功能比较简单，以后再慢慢完善吧。
 
-![image](https://cloud.githubusercontent.com/assets/11572353/23792584/80412fae-05c2-11e7-95fa-e8af9d7ed78f.png)
+![image](https://raw.githubusercontent.com/falseen/shadowsocks-pyqt/master/test/shadowsocks-pyqt.gui-srceen.png)
 
 **新版的加密都添加进去了**，只是说openssl加密库没有集成进去，需要单独安装。如果你的电脑上有多个版本的openssl加密库的话，那就蛋疼了。。它找到的第一个加密库不一定是支持新版加密算法的。所以关于这一点我希望能改下源码，不要一次只加载一个加密库，而是把所有找到的加密库都试一遍。
 
