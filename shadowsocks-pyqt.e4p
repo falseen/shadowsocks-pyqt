@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE Project SYSTEM "Project-5.1.dtd">
 <!-- eric project file for project shadowsocks-pyqt -->
-<!-- Saved: 2017-03-12, 05:17:54 -->
+<!-- Saved: 2017-03-14, 03:43:25 -->
 <!-- Copyright (C) 2017 Falseen,  -->
 <Project version="5.1">
   <Language>en_US</Language>
@@ -13,10 +13,12 @@
   <Email></Email>
   <Eol index="0"/>
   <Sources>
+    <Source>Ui_logwindow.py</Source>
     <Source>Ui_main.py</Source>
     <Source>main.py</Source>
   </Sources>
   <Forms>
+    <Form>logwindow.ui</Form>
     <Form>main.ui</Form>
   </Forms>
   <Translations/>
