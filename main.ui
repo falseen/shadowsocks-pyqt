@@ -339,7 +339,7 @@
         <item row="5" column="1">
          <widget class="QCheckBox" name="fastopenCheckBox">
           <property name="toolTip">
-           <string>Turn on one-time authentication and header verification (need server support)</string>
+           <string/>
           </property>
           <property name="text">
            <string>(Fast Open 仅支持linux系统)</string>
