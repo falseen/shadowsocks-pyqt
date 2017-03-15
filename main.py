@@ -155,6 +155,13 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                             datefmt='%Y-%m-%d %H:%M:%S',
                             filename=self.logpath,
                             filemode="a")
+        console = logging.StreamHandler()
+        console.setLevel(logging.INFO)
+        datefmt = '%Y-%m-%d %H:%M:%S'
+        formatter = logging.Formatter(
+            '%(asctime)s %(levelname)-8s %(message)s', datefmt=datefmt)
+        console.setFormatter(formatter)
+        logging.getLogger('').addHandler(console)
 
     def start(self):
         with open(self.logpath, "w") as file_:
