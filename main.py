@@ -169,10 +169,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         if sys.platform.startswith('win'):
             self.fastopenCheckBox.setEnabled(False)
         self.logwindow = LogWindow(self.logpath)
-        sslocal_process = SendeventProcess(
-            target=Shadowsocks_Process, args=(self.logpath,), daemon=True)
-        sslocal_process.start()
-        self.sslocal_process = sslocal_process
         config_path = find_config("gui-config.json")
         if config_path == None:
             logging.error("config_path is None")
@@ -416,6 +412,10 @@ if __name__ == "__main__":
         My_App.start()
         My_App.Tray_init()
         app.setQuitOnLastWindowClosed(False)
+        sslocal_process = SendeventProcess(
+            target=Shadowsocks_Process, args=(My_App.logpath,), daemon=True)
+        sslocal_process.start()
+        My_App.sslocal_process = sslocal_process
         # My_App.update()
         # My_App.show()
         sys.exit(app.exec_())
