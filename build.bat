@@ -1,7 +1,7 @@
 rm -rf ./dist/*
 git submodule init
 git submodule update --remote
-mv -f ./shadowsocks/shadowsocks/* ./shadowsocks/
+cp -a -f ./shadowsocks@master/shadowsocks .
 pyinstaller --clean --distpath dist/files -y main.spec
 pyinstaller --clean -y main_onefile.spec
 cd dist

@@ -46,3 +46,4 @@ _eric6project
 
 #shadowsocks-pyqt tmp file
 sslocal.log
+shadowsocks/*
