@@ -64,6 +64,7 @@ if sys.platform.startswith('win'):
 
 import multiprocessing
 
+
 class SendeventProcess(multiprocessing.Process):
     def __init__(self, *args, **kwrg):
         multiprocessing.Process.__init__(self, *args, **kwrg)
@@ -75,9 +76,11 @@ def read_json(config_path):
         j = json.loads(ff, object_pairs_hook=collections.OrderedDict)
     return j
 
+
 def save_json(config_path, json_dict):
-    with open(config_path , mode = 'w', encoding="utf-8") as f : 
-        json.dump(json_dict,f, ensure_ascii = False ,indent=2)
+    with open(config_path, mode='w', encoding="utf-8") as f:
+        json.dump(json_dict, f, ensure_ascii=False, indent=2)
+
 
 def find_config(config_name):
     config_path = config_name
@@ -87,6 +90,7 @@ def find_config(config_name):
     if os.path.exists(config_path):
         return config_path
     return None
+
 
 def to_bytes(s):
     if bytes != str:
@@ -132,10 +136,10 @@ def new_self_method(self, method_name, new_method, logpath):
     method = getattr(self, method_name)
     info = sys.version_info
     if info[0] >= 3:
-        setattr(self, method_name, types.MethodType(\
+        setattr(self, method_name, types.MethodType(
                 lambda *args, **kwds: new_method(method, logpath, *args, **kwds), self))
     else:
-        setattr(self, method_name, types.MethodType(\
+        setattr(self, method_name, types.MethodType(
                 lambda *args, **kwds: new_method(method, logpath, *args, **kwds), self, self))
 
 
@@ -147,10 +151,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.logpath = "sslocal.log"
         logging.getLogger('').handlers = []
         logging.basicConfig(level=logging.INFO,
-                        format='%(asctime)s %(levelname)-8s %(message)s',
-                        datefmt='%Y-%m-%d %H:%M:%S',
-                        filename = self.logpath,
-                        filemode = "a")
+                            format='%(asctime)s %(levelname)-8s %(message)s',
+                            datefmt='%Y-%m-%d %H:%M:%S',
+                            filename=self.logpath,
+                            filemode="a")
 
     def start(self):
         with open(self.logpath, "w") as file_:
@@ -158,7 +162,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         if sys.platform.startswith('win'):
             self.fastopenCheckBox.setEnabled(False)
         self.logwindow = LogWindow(self.logpath)
-        sslocal_process = SendeventProcess(target=Shadowsocks_Process, args=(self.logpath,), daemon = True)
+        sslocal_process = SendeventProcess(
+            target=Shadowsocks_Process, args=(self.logpath,), daemon=True)
         sslocal_process.start()
         self.sslocal_process = sslocal_process
         config_path = find_config("gui-config.json")
@@ -167,12 +172,13 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             raise
         self.gui_config = read_json(config_path)
         configlist = self.configlist
-        for x in self.gui_config.get("configs",{}):
+        for x in self.gui_config.get("configs", {}):
             x = check_config(x)
-            if x.get("remarks","") == "":
-                item_text = "%s:%s" %(x["server"], x["server_port"])
+            if x.get("remarks", "") == "":
+                item_text = "%s:%s" % (x["server"], x["server_port"])
             else:
-                item_text = "%s (%s:%s)" %(x["remarks"],x["server"], x["server_port"])    
+                item_text = "%s (%s:%s)" % (
+                    x["remarks"], x["server"], x["server_port"])
             configlist.addItem(item_text)
         index = self.gui_config.get("index", 0)
         configlist.setCurrentRow(index)
@@ -201,15 +207,17 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             gui_config["index"] = index
         else:
             gui_config["configs"].append(new_config)
-        
+
         config_path = find_config("gui-config.json")
         if config_path == None:
             logging.error("config_path is None")
         save_json(config_path, gui_config)
-        if new_config.get("remarks","") == "":
-            item_text = "%s:%s" %(new_config["server"], new_config["server_port"])
+        if new_config.get("remarks", "") == "":
+            item_text = "%s:%s" % (
+                new_config["server"], new_config["server_port"])
         else:
-            item_text = "%s (%s:%s)" %(new_config["remarks"], new_config["server"], new_config["server_port"])      
+            item_text = "%s (%s:%s)" % (
+                new_config["remarks"], new_config["server"], new_config["server_port"])
         self.configlist.currentItem().setText(item_text)
 
     @pyqtSlot()
@@ -222,7 +230,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.sslocal_process.join()
         self.save_config()
         logging.info("restart ss-local")
-        sslocal_process = SendeventProcess(target=Shadowsocks_Process, args=(self.logpath,), daemon = True)
+        sslocal_process = SendeventProcess(
+            target=Shadowsocks_Process, args=(self.logpath,), daemon=True)
         sslocal_process.start()
         self.sslocal_process = sslocal_process
         self.showMessage(u"配置已生效！")
@@ -248,7 +257,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.configlist.takeItem(index)
         if index < len(self.gui_config["configs"]):
             self.gui_config["configs"].pop(index)
-        self.update()    
+        self.update()
 
     @pyqtSlot()
     def on_add_config_clicked(self):
@@ -275,7 +284,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         index = self.configlist.currentRow()
         select_config = user_json["configs"][index]
         select_config = check_config(select_config)
-        remarks = select_config.get("remarks","")
+        remarks = select_config.get("remarks", "")
         server_addr = select_config["server"]
         server_port = select_config["server_port"]
         password = select_config["password"]
@@ -300,56 +309,62 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.tray = QSystemTrayIcon()
         self.icon = self.windowIcon()
         self.tray.setIcon(self.icon)
-        self.tray.activated[QSystemTrayIcon.ActivationReason].connect(self.TrayEvent)
+        self.tray.activated[QSystemTrayIcon.ActivationReason].connect(
+            self.TrayEvent)
         self.tray_menu = QtWidgets.QMenu(QtWidgets.QApplication.desktop())
-        self.ShowAction = QtWidgets.QAction(u'还原 ', self, triggered=self.re_build)
-        self.ShowLog = QtWidgets.QAction(u'查看日志 ', self, triggered=self.logwindow.showlog)
-        self.QuitAction = QtWidgets.QAction(u'退出 ', self, triggered=self.app_quit)
+        self.ShowAction = QtWidgets.QAction(
+            u'还原 ', self, triggered=self.re_build)
+        self.ShowLog = QtWidgets.QAction(
+            u'查看日志 ', self, triggered=self.logwindow.showlog)
+        self.QuitAction = QtWidgets.QAction(
+            u'退出 ', self, triggered=self.app_quit)
         self.tray_menu.addAction(self.ShowLog)
         self.tray_menu.addAction(self.ShowAction)
         self.tray_menu.addAction(self.QuitAction)
-        self.tray.setContextMenu(self.tray_menu) #设置系统托盘菜单
+        self.tray.setContextMenu(self.tray_menu)  # 设置系统托盘菜单
         self.tray.show()
         self.showMessage(u"shadowsocks-pyqt 已经启动！")
 
-    
     def re_build(self):
         self.hide()
         self.update()
         self.show()
         self.activateWindow()
-    
+
     def TrayEvent(self, reason):
-        if reason == QSystemTrayIcon.DoubleClick:  
+        if reason == QSystemTrayIcon.DoubleClick:
             if self.isHidden() or self.destroyed:
                 self.re_build()
-            else:  
+            else:
                 self.hide()
 
     def showMessage(self, text):
         icon = self.tray.MessageIcon()
-        self.tray.showMessage(u'提示', text, icon,1000)
+        self.tray.showMessage(u'提示', text, icon, 1000)
+
 
 class LogWindow(QMainWindow, Ui_LogWindow):
     log_sin = pyqtSignal(str)
+
     def __init__(self, logpath, parent=None):
         super(LogWindow, self).__init__(parent)
         self.setupUi(self)
         self.log_sin.connect(self.LogBrowser.append)
         self.tail_log = tail_log.Tail(logpath)
         self.tail_log.register_callback(self.log_sin.emit)
-    
+
     def showlog(self):
         self.show()
         if not self.tail_log.is_start:
-            self.showlog_thread = threading.Thread(\
-                    target = self.tail_log.follow, kwargs={"s": 1}, daemon=True).start()
+            self.showlog_thread = threading.Thread(
+                target=self.tail_log.follow, kwargs={"s": 1}, daemon=True).start()
 
     def closeEvent(self, event):
         self.tail_log.is_stop = True
         if hasattr(self.showlog_thread, "join"):
             self.showlog_thread.join()
         self.is_start = False
+
 
 class MyLogHandler(logging.Handler):
     def __init__(self, obj):
@@ -358,7 +373,8 @@ class MyLogHandler(logging.Handler):
 
     def emit(self, record):
         tstr = time.strftime('%Y-%m-%d %H:%M:%S.%U')
-        self.obj.emit("%s %s %s"%(tstr, record.levelname, record.getMessage()))
+        self.obj.emit("%s %s %s" %
+                      (tstr, record.levelname, record.getMessage()))
 
 
 def new_basicConfig(orgin_method, logpath, self, *args, **kwds):
@@ -367,8 +383,9 @@ def new_basicConfig(orgin_method, logpath, self, *args, **kwds):
     orgin_method(*args, **kwds)
     console = logging.StreamHandler()
     console.setLevel(logging.INFO)
-    datefmt='%Y-%m-%d %H:%M:%S'
-    formatter = logging.Formatter('%(asctime)s %(levelname)-8s %(message)s', datefmt = datefmt)
+    datefmt = '%Y-%m-%d %H:%M:%S'
+    formatter = logging.Formatter(
+        '%(asctime)s %(levelname)-8s %(message)s', datefmt=datefmt)
     console.setFormatter(formatter)
     logging.getLogger('').addHandler(console)
 
@@ -376,12 +393,13 @@ def new_basicConfig(orgin_method, logpath, self, *args, **kwds):
 def Shadowsocks_Process(logpath):
     logging.getLogger('').handlers = []
     logging.basicConfig(level=logging.INFO,
-                    format='%(asctime)s %(levelname)-8s %(message)s',
-                    datefmt='%Y-%m-%d %H:%M:%S',
-                    filename = logpath,
-                    filemode = "a")
+                        format='%(asctime)s %(levelname)-8s %(message)s',
+                        datefmt='%Y-%m-%d %H:%M:%S',
+                        filename=logpath,
+                        filemode="a")
     new_self_method(logging, "basicConfig", new_basicConfig, logpath)
     ss_local.main()
+
 
 if __name__ == "__main__":
     try:
@@ -399,4 +417,4 @@ if __name__ == "__main__":
         raise
     finally:
         My_App.sslocal_process.terminate()
-        My_App.sslocal_process.join()    
+        My_App.sslocal_process.join()
