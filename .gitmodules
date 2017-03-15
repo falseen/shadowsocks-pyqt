@@ -1,5 +1,5 @@
 [submodule "shadowsocks"]
-	path = shadowsocks
+	path = shadowsocks@master
 	url = https://github.com/shadowsocks/shadowsocks
 	branch = master
-    ignore = all
+    update = !cp -a -f ./shadowsocks@master/shadowsocks .
