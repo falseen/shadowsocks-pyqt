@@ -15,7 +15,7 @@
 * python3
 * PyQt5
 * git
-
+* openssl (注意要与系统和python3的位数一致)
 ## 运行：
 * **安装依赖，初始化子模块（即更新shadowsocks，也可以手动下载放入）**：
   * git submodule init
