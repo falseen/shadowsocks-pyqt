@@ -401,7 +401,9 @@ def Shadowsocks_Process(logpath):
                         filename=logpath,
                         filemode="a")
     new_self_method(logging, "basicConfig", new_basicConfig, logpath)
-    os.environ['path'] = 'lib;' + os.environ['path']
+    os.environ['path'] = '%s;%s' %('lib', os.environ['path'])
+    x64_libpath = os.path.join('lib', 'x64')
+    os.environ['path'] = '%s;%s' %(x64_libpath, os.environ['path'])
     ss_local.main()
 
 
