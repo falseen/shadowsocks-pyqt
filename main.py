@@ -15,6 +15,7 @@ from Ui_main import Ui_MainWindow
 from Ui_logwindow import Ui_LogWindow
 from shadowsocks import local as ss_local
 import sys
+import platform
 import os
 import json
 import logging
@@ -401,9 +402,12 @@ def Shadowsocks_Process(logpath):
                         filename=logpath,
                         filemode="a")
     new_self_method(logging, "basicConfig", new_basicConfig, logpath)
-    os.environ['path'] = '%s;%s' %('lib', os.environ['path'])
-    x64_libpath = os.path.join('lib', 'x64')
-    os.environ['path'] = '%s;%s' %(x64_libpath, os.environ['path'])
+    if sys.platform.startswith('win'):
+        if "32bit" in platform.architecture():
+            libpath = 'lib'
+        else:
+            libpath = os.path.join('lib', 'x64')
+        os.environ['path'] = '%s;%s' %(libpath, os.environ['path'])
     ss_local.main()
 
 
