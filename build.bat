@@ -8,6 +8,7 @@ cd dist
 mkdir shadowsocks_tmp
 mv shadowsocks-pyqt* shadowsocks_tmp/
 cp -a -f ../res shadowsocks_tmp/
+cp -a -f ../lib shadowsocks_tmp/
 cp -f ../config.json shadowsocks_tmp/
 cp -f ../gui-config.json shadowsocks_tmp/
 mv shadowsocks_tmp shadowsocks-pyqt
