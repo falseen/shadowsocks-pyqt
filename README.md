@@ -5,6 +5,7 @@
 只是用pyqt5简单的包装了一下，里面的代码还是shadowsocks的，这样话就可以跟着python版的shadowsocks一起更新了，框架完成之后基本上就不用做什么改动了。理论上是跨平台的。目前已经在win32、win64、ubuntu32、ubuntu64上打包并测试通过，如果无法在你的系统下运行，请自行打包。
 
 界面看起来是这个样子的，功能比较简单，以后再慢慢完善吧。**新版的加密都添加进去了**，而且把加密库文件也集成进去了。
+
 ![image](https://raw.githubusercontent.com/falseen/shadowsocks-pyqt/master/test/shadowsocks-pyqt.gui-srceen.png)
 
 
